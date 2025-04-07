@@ -16,13 +16,12 @@ def renombrar_expediente(carpeta_origen:str, carpeta_id:str):
                 nuevo_nombre = f"{id}-{utils.conversion_dict['empty']}.pdf"
             else:
                 nombre_base = utils.transform_pd_code(nombre_base)
-                print(nombre_base)
                 nuevo_nombre = f"{id}-{utils.conversion_dict[nombre_base]}.pdf"
 
             ruta_archivo_viejo = os.path.join(carpeta_origen, nom_archivo)
             ruta_archivo_nuevo = os.path.join(carpeta_origen, nuevo_nombre)
             os.rename(ruta_archivo_viejo, ruta_archivo_nuevo)
-            print(f"Renamed {ruta_archivo_viejo} to {ruta_archivo_nuevo}")
+            print(f"Archivo {nom_archivo} renombrado a {nuevo_nombre}")
 
 def renombrar_archivos_en_carpeta(carpeta_origen, carpeta_id):
     """
@@ -60,6 +59,6 @@ def renombrar_archivos_en_rango(carpeta_mes, intervalo_inicial, intervalo_final)
         if os.path.isdir(carpeta_origen):
             renombrar_archivos_en_carpeta(carpeta_origen, str(i))
         else:
-            print(f"Folder {carpeta_origen} does not exist. Skipping.")
+            print(f"Carpeta con expediente {str(i)} no existe en el mes seleccionado. Continuando con el siguiente expediente.")
 
 

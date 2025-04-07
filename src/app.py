@@ -20,10 +20,16 @@ class TextRedirector(object):
 def browse_folder():
     folder = filedialog.askdirectory()
     if folder:
+        # Update folder entry
         folder_entry.config(state="normal")
         folder_entry.delete(0, tk.END)
         folder_entry.insert(0, folder)
         folder_entry.config(state="readonly")
+        
+        # Clear the log text widget
+        log_text.config(state=tk.NORMAL)
+        log_text.delete("1.0", tk.END)
+        log_text.config(state=tk.DISABLED)
 
 def run_renaming():
     folder = folder_entry.get()
@@ -31,11 +37,11 @@ def run_renaming():
         intervalo_inicial = int(start_entry.get())
         intervalo_final = int(end_entry.get())
     except ValueError:
-        messagebox.showerror("Error", "Please enter valid numbers for the interval.")
+        messagebox.showerror("Error", "Por favor, ingresa un intervalo numérico válido.")
         return
 
     if not os.path.isdir(folder):
-        messagebox.showerror("Error", "The selected folder is not a valid directory.")
+        messagebox.showerror("Error", "La carpeta seleccionada no es valida.")
         return
 
     # Redirect stdout to the log_text widget
@@ -44,9 +50,9 @@ def run_renaming():
     
     try:
         renombrar_archivos_en_rango(folder, intervalo_inicial, intervalo_final)
-        messagebox.showinfo("Success", "Files renamed successfully.")
+        messagebox.showinfo("Success", "Archivos renombrados satisfactoriamente.")
     except Exception as e:
-        messagebox.showerror("Error", f"An error occurred: {e}")
+        messagebox.showerror("Error", f"Un error ha ocurrido: {e}")
     finally:
         sys.stdout = old_stdout
 
@@ -79,13 +85,13 @@ end_entry = ttk.Entry(frame, width=10)
 end_entry.grid(row=2, column=1, sticky=tk.W, padx=5, pady=5)
 
 # Run button
-run_btn = ttk.Button(frame, text="Renombrar Archivos", command=run_renaming)
+run_btn = ttk.Button(frame, text="Renombrar Expedientes", command=run_renaming)
 run_btn.grid(row=3, column=1, pady=10)
 
 # Log display area
-log_label = ttk.Label(frame, text="Resultado de archivos:")
+log_label = ttk.Label(frame, text="Información sobre archivos:")
 log_label.grid(row=4, column=0, sticky=tk.W, pady=(10,0))
-log_text = tk.Text(frame, height=10, width=80, state=tk.DISABLED)
+log_text = tk.Text(frame, height=10, width=100, state=tk.DISABLED)
 log_text.grid(row=5, column=0, columnspan=3, pady=(0,10))
 
 root.mainloop()
