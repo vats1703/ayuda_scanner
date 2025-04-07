@@ -55,67 +55,39 @@ def renombrar_expediente(carpeta_origen, carpeta_id, conversion_dict):
             os.rename(ruta_archivo_viejo, ruta_archivo_nuevo)
             print(f"Renamed {ruta_archivo_viejo} to {ruta_archivo_nuevo}")
 
+def renombrar_archivos_en_carpeta(carpeta_origen, carpeta_id, conversion_dict):
+    """
+    Renames files in the specified folder based on the provided conversion dictionary.
+    
+    Args:
+        carpeta_origen (str): The path to the folder containing the files to rename.
+        carpeta_id (int): The ID of the folder.
+        conversion_dict (dict): A dictionary mapping old names to new names.
+    """
+    # Check if the folder exists
+    if not os.path.isdir(carpeta_origen):
+        print(f"Folder {carpeta_origen} does not exist. Skipping.")
+        return
 
+    # Rename files in the folder
+    renombrar_expediente(carpeta_origen, carpeta_id, conversion_dict)
 
+def renombrar_archivos_en_rango(carpeta_mes, intervalo_inicial, intervalo_final, conversion_dict):
+    """
+    Renames files in folders within the specified range in the month folder.
+    
+    Args:
+        carpeta_mes (str): The path to the month folder.
+        intervalo_inicial (int): The starting folder number.
+        intervalo_final (int): The ending folder number.
+        conversion_dict (dict): A dictionary mapping old names to new names.
+    """
+    # Iterate through each folder within the specified interval in the month folder
+    for i in range(intervalo_inicial, intervalo_final + 1):
+        carpeta_origen = os.path.join(carpeta_mes, str(i))
 
-def rename_files_in_folder(folder_path, folder_id, renaming_tree):
-    keys = find_keys(folder_path)
-    keys_bm = keys[0]
-    for file_name in os.listdir(folder_path):
-        if file_name.endswith(".pdf"):
-            base_name = os.path.splitext(file_name)[0]
-            key = base_name.split("merged-")[-1]  # Extract the key part from the filename 
-            if keys_bm == '1-2':
-                if key == keys_bm:
-                    new_value = renaming_tree.find_value(key)
-                else:
-                    new_value = renaming_tree.children['1-2'].find_value(key)
-
-            elif keys_bm == '1-6':
-                if key == keys_bm:
-                    new_value = renaming_tree.find_value(key)
-                else:
-                    new_value = renaming_tree.children['1-6'].find_value(key)
-
-            else:
-                new_value = None
-                
-            if new_value:
-                new_name = f"{folder_id}-{new_value}.pdf"
-                old_file_path = os.path.join(folder_path, file_name)
-                new_file_path = os.path.join(folder_path, new_name)
-                os.rename(old_file_path, new_file_path)
-                print(f"Renamed {old_file_path} to {new_file_path}")
-            else:
-                print(f"No matching rule for {file_name}, leaving it unchanged.")
-        
-
-# def main():
-#     if len(sys.argv) != 4:
-#         print("Usage: python rename_pdfs.py <month_folder> <start_interval> <end_interval>")
-#         sys.exit(1)
-
-#     month_folder = sys.argv[1]
-#     start_interval = int(sys.argv[2])
-#     end_interval = int(sys.argv[3])
-
-#     # Check if the month folder exists
-#     if not os.path.isdir(month_folder):
-#         print("The specified month folder does not exist.")
-#         sys.exit(1)
-
-#     # Build the renaming rules tree
-#     renaming_tree = treenodepersonal.build_renaming_tree()
-
-#     # Iterate through each folder within the specified interval in the month folder
-#     for i in range(start_interval, end_interval + 1):
-#         folder_path = os.path.join(month_folder, str(i))
-
-#         # Check if the folder exists
-#         if os.path.isdir(folder_path):
-#             rename_files_in_folder(folder_path, i, renaming_tree)
-#         else:
-#             print(f"Folder {folder_path} does not exist. Skipping.")
-
-# if __name__ == "__main__":
-#     main()
+        # Check if the folder exists
+        if os.path.isdir(carpeta_origen):
+            renombrar_archivos_en_carpeta(carpeta_origen, i, conversion_dict)
+        else:
+            print(f"Folder {carpeta_origen} does not exist. Skipping.")
