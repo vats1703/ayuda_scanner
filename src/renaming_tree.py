@@ -1,6 +1,6 @@
 import os
 import sys
-import treenode
+import treenodepersonal
 
 def sort_key(s):
     # Split the string at the hyphen
@@ -8,7 +8,7 @@ def sort_key(s):
     # Convert the first part to an integer
     return int(first_part)
 
-# Function to rename files in a folder based on the tree
+# Rename files in a folder based on the tree
 def find_keys(folder_path):
     keys = []
     for file_name in os.listdir(folder_path):
@@ -66,7 +66,7 @@ def main():
         sys.exit(1)
 
     # Build the renaming rules tree
-    renaming_tree = treenode.build_renaming_tree()
+    renaming_tree = treenodepersonal.build_renaming_tree()
 
     # Iterate through each folder within the specified interval in the month folder
     for i in range(start_interval, end_interval + 1):
