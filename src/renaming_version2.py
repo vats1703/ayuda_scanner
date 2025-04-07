@@ -1,12 +1,13 @@
 import os
-import sys
 import utils
 
 
 
-
-
-def renombrar_expediente(carpeta_origen, carpeta_id):
+def renombrar_expediente(carpeta_origen:str, carpeta_id:str):
+    """
+    carpeta_id = string del nombre del expediente
+    carpeta_origen = Path al archivo donde la carpeta está localizada
+    """
     id = carpeta_id
     for nom_archivo in os.listdir(carpeta_origen):
         if nom_archivo.endswith(".pdf"):
@@ -15,7 +16,9 @@ def renombrar_expediente(carpeta_origen, carpeta_id):
                 nuevo_nombre = f"{id}-{utils.conversion_dict['empty']}.pdf"
             else:
                 nombre_base = utils.transform_pd_code(nombre_base)
+                print(nombre_base)
                 nuevo_nombre = f"{id}-{utils.conversion_dict[nombre_base]}.pdf"
+
             ruta_archivo_viejo = os.path.join(carpeta_origen, nom_archivo)
             ruta_archivo_nuevo = os.path.join(carpeta_origen, nuevo_nombre)
             os.rename(ruta_archivo_viejo, ruta_archivo_nuevo)
@@ -38,6 +41,7 @@ def renombrar_archivos_en_carpeta(carpeta_origen, carpeta_id):
     # Rename files in the folder
     renombrar_expediente(carpeta_origen, carpeta_id)
 
+
 def renombrar_archivos_en_rango(carpeta_mes, intervalo_inicial, intervalo_final):
     """
     Renames files in folders within the specified range in the month folder.
@@ -54,7 +58,7 @@ def renombrar_archivos_en_rango(carpeta_mes, intervalo_inicial, intervalo_final)
 
         # Check if the folder exists
         if os.path.isdir(carpeta_origen):
-            renombrar_archivos_en_carpeta(carpeta_origen, i)
+            renombrar_archivos_en_carpeta(carpeta_origen, str(i))
         else:
             print(f"Folder {carpeta_origen} does not exist. Skipping.")
 
